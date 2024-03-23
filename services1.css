@@ -80,3 +80,10 @@ header .tittle{
 .about{
     background-color: #222;
 }
+img{
+    min-height: 10vh;
+    width: 100%;
+}
+.tittle1{
+    font-size: 50px;
+}

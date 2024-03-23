@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="contact.css">
+</head>
+<body>
+    <section class="contact-form">
+        <h2>Contact Us</h2>
+        <form id="contactForm">
+            <div class="form-group">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+            </div>
+            <button type="submit">Send Message</button>
+            <a href="home.html">Back</a>
+        </form>
+    </section>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCszXoVpaTEtsGjwO-IbThLHqITd4VAYBI",
+            authDomain: "contact-dfe12.firebaseapp.com",
+            databaseURL: "https://contact-dfe12-default-rtdb.firebaseio.com",
+            projectId: "contact-dfe12",
+            storageBucket: "contact-dfe12.appspot.com",
+            messagingSenderId: "194688763724",
+            appId: "1:194688763724:web:db5032e506f50afb88f1e9"
+        };
+
+        // Initialize Firebase
+        const firebaseApp = initializeApp(firebaseConfig);
+        const database = getDatabase(firebaseApp);
+        const contactFormDB = ref(database, 'contactForm');
+
+        document.getElementById("contactForm").addEventListener("submit", submitForm)
+
+        function submitForm(e) {
+            e.preventDefault();
+            
+            const name = getElementVal("name");
+            const email = getElementVal("email");
+            const message = getElementVal("message");
+
+            saveMessage(name, email, message);
+        }
+
+        function saveMessage(name, email, message) {
+            set(push(contactFormDB), {
+                name: name,
+                email: email,
+                message: message
+            }).then(() => {
+                alert("Message sent successfully!");
+                document.getElementById("contactForm").reset(); // Clear form after successful submission
+            }).catch((error) => {
+                console.error("Error saving message to Firebase:", error);
+                alert("An error occurred. Please try again later.");
+            });
+        }
+
+
+        function getElementVal(id) {
+            return document.getElementById(id).value;
+        }
+    </script>
+</body>
+</html>
